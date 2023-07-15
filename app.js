@@ -5,7 +5,6 @@ const _ = require('lodash');
 const { send } = require('process');
 const time = require(__dirname + "/time");
 const app = express();
-const port = 3000;
 
 app.use(express.static("public"), bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
@@ -15,7 +14,7 @@ console.log(time.getTime());
 console.log(time.getDay());
 
 
-mongoose.connect('mongodb+srv://test123:test123@cluster0.c5buque.mongodb.net/?retryWrites=true&w=majority', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://test123:test123@cluster0.c5buque.mongodb.net/todoListDB', {useNewUrlParser: true});
 
 const itemSchema = mongoose.Schema({
     todo: String
@@ -87,4 +86,10 @@ app.get("/about", (req,res)=>{
     res.render("about")
 })
 
-app.listen(process.env.PORT || 3000, () => console.log(`Example app listening on port ${port}!`))
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
