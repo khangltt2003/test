@@ -1,30 +1,42 @@
 <%- include('header'); -%>
 
 <body>
-    <div class="box" id ="heading">
-        <h1><%=  todoObject.listName %></h1>
-        <h2><%= time %> </h2>
-    </div>
+  <div class="box" id="heading">
+    <h1><%= todoObject.listName %></h1>
+    <h2><%= time %></h2>
+  </div>
 
-    <div class="box">
-        <% for(let i = 0; i <  todoObject.items.length; i++){ %>
-            <form action="/delete" method="POST">
-                <div class="item">
-                    <input type="checkbox" name= "id" value="<%= todoObject.items[i]._id%>" onChange="this.form.submit()">
-                    <p> <%=  todoObject.items[i].todo %></p>
-                </div>
-                <!--hidden input to track listName  -->
-                <input type="hidden" name="listName" value="<%= todoObject.listName %>" >
-            </form>
-        <% } %>
+  <div class="box">
+    <% for(let i = 0; i < todoObject.items.length; i++){ %>
+    <form action="/delete" method="POST">
+      <div class="item">
+        <input
+          type="checkbox"
+          name="id"
+          value="<%= todoObject.items[i]._id%>"
+          onChange="this.form.submit()"
+        />
+        <p><%= todoObject.items[i].todo %></p>
+      </div>
+      <!--hidden input to track listName  -->
+      <input type="hidden" name="listName" value="<%= todoObject.listName %>" />
+    </form>
+    <% } %>
 
-        
-
-        <form class="addTodoForm" action="/" method="POST">
-            <input type="text" placeholder="Enter a task" name="newItem" autocomplete="off" autofocus="autofocus">
-            <button type="submit" name="listName" value= "<%=  todoObject.listName %>" >+</button> <!-- set value to type passed from app.js -->
-        </form>
-    </div>
+    <form class="addTodoForm" action="/" method="POST">
+      <input
+        type="text"
+        placeholder="Enter a task"
+        name="newItem"
+        autocomplete="off"
+        autofocus="autofocus"
+      />
+      <button type="submit" name="listName" value="<%=  todoObject.listName %>">
+        +
+      </button>
+      <!-- set value to type passed from app.js -->
+    </form>
+  </div>
 </body>
 
 <%- include('footer'); -%>
