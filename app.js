@@ -39,20 +39,21 @@ app.get("/:listName", (req, res) => {
   const listName = _.capitalize(req.params.listName);
   const renderPage = async () => {
     //find object that has listName = param route
-    await todoList
-      .findOne({ listName: listName }, { listName: 1, items: 1 })
-      .then((todoObject) => {
-        if (todoObject) {
-          res.render("list", { time: time.getTime(), todoObject: todoObject }); //render(file, {: }) and set type to TODO
-        } else {
-          //if object not exist, create a todolist object with empty items array and save to db
-          const list = new todoList({
-            listName: listName,
-            items: [],
-          });
-          list.save().then(() => res.redirect("/" + listName));
-        }
+    const todoObject = await todoList.findOne(
+      { listName: listName },
+      { listName: 1, items: 1 }
+    );
+
+    if (todoObject) {
+      res.render("list", { time: time.getTime(), todoObject: todoObject }); //render(file, {: }) and set type to TODO
+    } else {
+      //if object not exist, create a todolist object with empty items array and save to db
+      const list = new todoList({
+        listName: listName,
+        items: [],
       });
+      await list.save().then(() => res.redirect("/" + listName));
+    }
   };
   renderPage();
 });
@@ -87,8 +88,7 @@ app.post("/delete", (req, res) => {
       { $pull: { items: { _id: checkedItemID } } }
     );
   };
-  deleteItem();
-  res.redirect("/" + req.body.listName);
+  deleteItem().then(() => res.redirect("/" + req.body.listName));
 });
 
 app.get("/about", (req, res) => {
